@@ -1,28 +1,20 @@
 from __future__ import annotations
 
-import boto3
+import requests
 
 
-def get_ssm_parameter_value(parameter_string, ssm_client=None):
-    if ssm_client is None:
-        ssm_client = boto3.client('ssm')
+class Bot:
+    def __init__(self, token) -> None:
+        self.token = token
+        self.session = requests.Session()
+        self.request_string = f'https://api.telegram.org/bot{self.token}/'
 
-    parameter = ssm_client.get_parameter(
-        Name=parameter_string, WithDecryption=True,
-    )
+    def send_message(self, chat_id: int, text: str):
+        url = self.request_string + 'sendMessage'
+        json_data = {
+            'chat_id': chat_id,
+            'text': text,
+        }
+        response = self.session.post(url=url, json=json_data)
 
-    return parameter['Parameter']['Value']
-
-
-def main():
-    api_token = get_ssm_parameter_value('/config/bot/api_token')
-
-    return {
-        'status': 200,
-        'value': api_token[:5] + '*' * len(api_token[5:]),
-    }
-
-
-def lambda_handler(event, context):
-
-    return main()
+        return response.status_code
