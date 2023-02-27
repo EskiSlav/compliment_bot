@@ -2,25 +2,15 @@ from __future__ import annotations
 
 import json
 
-import boto3
-
-from bot import Bot
-from models import Update
-
-
-def get_ssm_parameter_value(parameter_string, ssm_client=None):
-    if ssm_client is None:
-        ssm_client = boto3.client('ssm')
-
-    parameter = ssm_client.get_parameter(
-        Name=parameter_string, WithDecryption=True,
-    )
-
-    return parameter['Parameter']['Value']
+import aws
+from tg.bot import Bot
+from tg.models import Update
+# from aws.ssm import get_ssm_parameter_value
+# from aws.translate import Translator
 
 
 def main(event, context):
-    api_token = get_ssm_parameter_value('/config/bot/api_token')
+    api_token = aws.get_ssm_parameter_value('/config/bot/api_token')
     print(event)
 
     update = Update(json.loads(event['body']))
