@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from logging.config import dictConfig
 
 FORMAT = '[%(levelname)s] %(asctime)s %(name)s %(funcName)s: %(message)s'
 LOGGING_LEVEL = logging.DEBUG
@@ -31,6 +30,5 @@ logging_config = {
     'disable_existing_loggers': True,
 }
 
-dictConfig(logging_config)
 
 logger = logging.getLogger(__name__)
