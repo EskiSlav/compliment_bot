@@ -3,9 +3,9 @@ from __future__ import annotations
 from hashlib import sha1
 
 import boto3
+from tg.models import User
 
 from .models import Compliment
-from tg.models import User
 
 
 class DynamoDB:
